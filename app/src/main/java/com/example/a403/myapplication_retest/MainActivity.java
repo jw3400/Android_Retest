@@ -21,8 +21,11 @@ public class MainActivity extends AppCompatActivity {
     Chronometer ch;
     Switch sw;
     LinearLayout Layout1;
+    LinearLayout Layout2;
     Button bu1;
     Button bu2;
+    Button bu3;
+    Button bu4;
     EditText e1;
     EditText e2;
     EditText e3;
@@ -32,8 +35,18 @@ public class MainActivity extends AppCompatActivity {
     RadioButton r1;
     RadioButton r2;
     RadioButton r3;
+    RadioButton r4;
+    RadioButton r5;
     ImageView image;
+    TimePicker ti;
+    CalendarView ca;
 
+    int year = 0;
+    int month = 0;
+    int day = 0;
+    int hour = 0;
+    int min = 0;
+    int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         Layout1 = (LinearLayout) findViewById(R.id.layout1);
         Layout1.setVisibility(View.GONE);
+        Layout2 = (LinearLayout) findViewById(R.id.layout2);
+        Layout2.setVisibility(View.GONE);
         sw = (Switch) findViewById(R.id.switch1);
         label1 = (TextView) findViewById(R.id.textView6);
         label2 = (TextView) findViewById(R.id.textView8);
@@ -53,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
         r1 = (RadioButton) findViewById(R.id.radioButton);
         r2 = (RadioButton) findViewById(R.id.radioButton2);
         r3 = (RadioButton) findViewById(R.id.radioButton3);
+        r4 = (RadioButton) findViewById(R.id.radioButton4);
+        r5 = (RadioButton) findViewById(R.id.radioButton5);
         ch = (Chronometer) findViewById(R.id.chronometer);
+        ti = (TimePicker) findViewById(R.id.timePicker);
+        ca = (CalendarView) findViewById(R.id.calendarView);
+
+
 
         sw.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
@@ -61,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     Layout1.setVisibility(View.VISIBLE);
 
+                    flag = 1;
                     ch.setBase(SystemClock.elapsedRealtime());
                     ch.start();
                     ch.setTextColor(Color.BLUE);
@@ -150,9 +172,88 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Layout1.setVisibility(View.GONE);
-
+                            Layout2.setVisibility(View.VISIBLE);
                         }
                     });
+
+
+        r4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(r4.isChecked() == true)
+                {
+                    ti.setVisibility(View.INVISIBLE);
+                    ca.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        r5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(r5.isChecked() == true)
+                {
+                    ca.setVisibility(View.INVISIBLE);
+                    ti.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        ca.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView calendarView, int i, int j, int k) {
+                 year=i;
+                 month=j;
+                 day=k;
+            }
+        });
+
+        ti.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker timePicker, int i, int j) {
+                hour=i;
+                min=j;
+            }
+        });
+
+        bu3 = (Button) findViewById(R.id.button3);
+        bu3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(flag!=1)
+                {
+                    Toast.makeText(getApplicationContext(),"인원예약을 먼저 하세요.",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(year==0 || hour==0)
+                {
+                    Toast.makeText(getApplicationContext(),"날짜 혹은 시간을 체크 하셔야합니다.",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ch.stop();
+                ch.setTextColor(Color.RED);
+                Toast.makeText(getApplicationContext(),year+"."+month+"."+day+"."+" "+hour+":"+min+""+" 예약이 완료되었습니다.",Toast.LENGTH_SHORT).show();
+                flag=0;
+            }
+        });
+
+        bu4 = (Button) findViewById(R.id.button4);
+        bu4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Layout1.setVisibility(View.VISIBLE);
+                Layout2.setVisibility(View.GONE);
+            }
+        });
+
+
+
+
+
+
+
+
 
 
 
